@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+        <div class="digits">
+          <div class="digit">1</div>
+          <div class="digit">2</div>
+          <div class="digit">3</div>
+          <div class="digit">4</div>
+          <div class="digit">5</div>
+          <div class="digit">6</div>
+          <div class="digit">7</div>
+          <div class="digit">8</div>
+          <div class="digit">9</div>
+          <div class="digit">10</div>
+          <div class="digit">11</div>
+          <div class="digit">12</div>
+        </div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background:#018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size:cover;
+      font-family:'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display:flex;
+      flex:1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border:20px solid white;
+      border-radius:50%;
+      margin:50px auto;
+      position: relative;
+      padding:2rem;
+        box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width:50%;
+      height:6px;
+      background:black;
+      position: absolute;
+      top:50%;
+    }
+
+      /*I want to add numbers to the clock-face*/
+
+    .digits {
+      color: white;
+      position: relative;
+      top: 42%;
+      left: 45%;
+    }
+
+    .digit {
+      position: absolute;
+      width: 30px;
+      font-size: 4rem;
+      z-index: -1;
+    }
+
+    .digit:nth-of-type(1) {
+      transform: rotate(-60deg) translate(14rem) rotate(60deg);
+    }
+
+    .digit:nth-of-type(2) {
+      transform: rotate(-30deg) translate(14rem) rotate(30deg);
+    }
+
+    .digit:nth-of-type(3) {
+      transform: rotate(0deg) translate(14rem) rotate(0deg);
+    }
+
+    .digit:nth-of-type(4) {
+      transform: rotate(30deg) translate(14rem) rotate(-30deg);
+    }
+
+    .digit:nth-of-type(5) {
+      transform: rotate(60deg) translate(14rem) rotate(-60deg);
+    }
+
+    .digit:nth-of-type(6) {
+      transform: rotate(90deg) translate(14rem) rotate(-90deg);
+    }
+
+    .digit:nth-of-type(7) {
+      transform: rotate(120deg) translate(14rem) rotate(-120deg);
+    }
+
+    .digit:nth-of-type(8) {
+      transform: rotate(150deg) translate(14rem) rotate(-150deg);
+    }
+
+    .digit:nth-of-type(9) {
+      transform: rotate(180deg) translate(14rem) rotate(-180deg);
+    }
+
+    .digit:nth-of-type(10) {
+      transform: rotate(210deg) translate(14rem) rotate(-210deg);
+    }
+
+    .digit:nth-of-type(11) {
+      transform: rotate(240deg) translate(14rem) rotate(-240deg);
+    }
+
+    .digit:nth-of-type(12) {
+      transform: rotate(270deg) translate(14rem) rotate(-270deg);
+    }
+
+  </style>
+
+  <script>
+// I move the clock's hands by rotating them with transform-origin: right
+//    transform-origin: right;
+//    transform: rotate(30deg);
+// for second-hand I change rotate every second and the quantum of rotation is 360/60 or I can do it six times per second for 1deg.
+// for minute-hand it is 6deg every 60 seconds or 1deg every 10sec.
+// for hour-hand it is 30deg every 3600 seconds or 1deg every 120sec.
+
+    const secondHandElm = document.getElementsByClassName('second-hand');
+    const minuteHandElm = document.getElementsByClassName('min-hand');
+    const hourHandElm   = document.getElementsByClassName('hour-hand');
+    runClock();
+
+    function runClock() {
+      syncClock();
+
+      secondHandElm[0].style.transformOrigin = 'right';
+      minuteHandElm[0].style.transformOrigin = 'right';
+      hourHandElm[0].style.transformOrigin   = 'right';
+
+      setInterval(() => {
+        syncClock();
+      },1000);
+    }
+
+    function syncClock() {
+      const today = new Date();
+      const hour = today.getHours();
+      const minutes = today.getMinutes();
+      const seconds = today.getSeconds();
+      // console.log(hour, minutes, seconds);
+
+      const rotationAngleHours   = 90 + hour    * 30 + (minutes * 0.5);
+      const rotationAngleMinutes = 90 + minutes * 6  + (seconds * 0.1) ;
+      const rotationAngleSeconds = 90 + seconds * 6;
+
+      hourHandElm[0].style.transform =   'rotate(' + rotationAngleHours   + 'deg)';
+      minuteHandElm[0].style.transform = 'rotate(' + rotationAngleMinutes + 'deg)';
+      secondHandElm[0].style.transform = 'rotate(' + rotationAngleSeconds + 'deg)';
+    }
+
+  </script>
+</body>
+</html>
