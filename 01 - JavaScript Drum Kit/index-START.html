@@ -59,6 +59,46 @@
 
 <script>
 
+    document.onkeydown = function(e) {
+      let audioElements = document.getElementsByTagName('audio');
+      for (let i = 0; i < audioElements.length; i++) {
+        let audioAttrList = audioElements[i].attributes;
+        let audioDataKey = audioAttrList.getNamedItem('data-key').nodeValue;
+        if (audioDataKey == e.keyCode) {
+          // audioElements[i].play();
+          play_multi_sound(audioElements[i]);
+        };
+      }
+      let keys = document.getElementsByClassName('key');
+      for (let i = 0; i < keys.length; i++) {
+        let keyAttrList = keys[i].attributes;
+        let keyDataKey = keyAttrList.getNamedItem('data-key').nodeValue;
+        if (keyDataKey == e.keyCode) {
+          keys[i].classList.add('playing');
+          setTimeout(() => keys[i].classList.remove('playing'), 70);
+        }
+        // console.log(keyDataKey);
+      };
+    };
+    var channel_max = 9;                    // number of channels
+    audiochannels = new Array();
+    for (a=0;a<channel_max;a++) {                  // prepare the channels
+      audiochannels[a] = new Array();
+      audiochannels[a]['channel'] = new Audio();            // create a new audio object
+      audiochannels[a]['finished'] = -1;              // expected end time for this channel
+    }
+    function play_multi_sound(elm) {
+      for (a=0;a<audiochannels.length;a++) {
+        thistime = new Date();
+        if (audiochannels[a]['finished'] < thistime.getTime()) {      // is this channel finished?
+          audiochannels[a]['finished'] = thistime.getTime() + elm.duration*1000;
+          audiochannels[a]['channel'].src = elm.src;
+          audiochannels[a]['channel'].load();
+          audiochannels[a]['channel'].play();
+          break;
+        }
+      }
+    }
 </script>
 
 
