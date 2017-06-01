@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+  function httpGet(theUrl) {
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        //console.log("We've got XHR resp");
+        let citiesList = xmlhttp.responseText;
+        //console.log(citiesList);
+        
+        // get a list of values we gonna look through
+        let lookUpList = JSON.parse(citiesList).map(({city, state, population}) => ({city, state, population}));
+        //console.log(lookUpList);
+
+        let inputElm = document.getElementsByClassName('search')[0];
+        let resultListElm = document.getElementsByClassName('suggestions')[0];
+
+        inputElm.addEventListener('input', () => {
+          //console.log("key pressed");
+          query = inputElm.value||'abcdefghjklmn'; // I want to prevent firing positive search results for empty string
+          //console.log(query);
+          //console.log(inputElm.value);
+          let resultCitiesList = lookUpList.filter((cityElm) => {
+            //console.log(cityElm.city.toLowerCase().indexOf(query.toLowerCase()) > -1);
+            return (cityElm.city.toLowerCase().includes(query.toLowerCase()) ||
+                    cityElm.state.toLowerCase().includes(query.toLowerCase()));
+          });
+          //1. Remove all list elements.
+          //2. Add as many <li> elm as I've got in resultCitiesList to the page and highlight inputed value.
+          while (resultListElm.firstChild) {
+            resultListElm.removeChild(resultListElm.firstChild);
+          }
+          resultCitiesList.forEach((cityEntry) => {
+            let listElm = document.createElement('li');
+            let listElmText = document.createTextNode(
+                              cityEntry.city + ', ' +
+                              cityEntry.state + ', ' +
+                              cityEntry.population);
+            // query
+
+            listElm.appendChild(listElmText);
+            //console.log(listElm);
+            let innerHTML = listElm.innerHTML;
+            let index = innerHTML.toLowerCase().indexOf(query.toLowerCase());
+            // console.log(index, query.length);
+            if (index > -1) {
+              innerHTML = innerHTML.substring(0, index) +
+                        "<span class='hl'>" +
+                        innerHTML.substring(index, index + query.length) +
+                        "</span>" +
+                        innerHTML.substring(index + query.length);
+              //console.log(listElm);
+              listElm.innerHTML = innerHTML;
+            };
+            resultListElm.appendChild(listElm);
+          });
+        });
+      }
+    }
+    xmlhttp.open("GET", theUrl);
+    xmlhttp.send();
+  }
+  httpGet(endpoint);
+
+</script>
+  </body>
+</html>
