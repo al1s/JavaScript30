@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪💪</title>
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+    // ## Array Cardio Day 2
+
+    function printOut(heading, input, output) {
+      const node = document.createElement('div');
+      const head = document.createElement('h2');
+      const headText = document.createTextNode(heading);
+
+      const textInElm = document.createElement('pre');
+      const textIn = document.createTextNode("INPUT: " +
+                      JSON.stringify(input, null, 4));
+
+      const textOutElm = document.createElement('pre');
+      const textOut = document.createTextNode("OUTPUT: " +
+                      JSON.stringify(output, null, 4));
+
+      head.appendChild(headText);
+      textInElm.appendChild(textIn);
+      textOutElm.appendChild(textOut);
+
+      node.appendChild(head);
+      node.appendChild(textInElm);
+      node.appendChild(textOutElm);
+
+      document.body.appendChild(node);
+    };
+
+    const people = [
+      { name: 'Wes', year: 1988 },
+      { name: 'Kait', year: 1986 },
+      { name: 'Irv', year: 1970 },
+      { name: 'Lux', year: 2015 }
+    ];
+
+    const comments = [
+      { text: 'Love this!', id: 523423 },
+      { text: 'Super good', id: 823423 },
+      { text: 'You are the best', id: 2039842 },
+      { text: 'Ramen is my fav food ever', id: 123523 },
+      { text: 'Nice Nice Nice!', id: 542328 }
+    ];
+
+    // Some and Every Checks
+    // Array.prototype.some() // is at least one person 19 or older?
+    // Array.prototype.every() // is everyone 19 or older?
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    // console.log(currentYear);
+    let isOlder19 = (year) => currentYear - year >= 19;
+    console.log(isOlder19(1977));
+    const anyOlder19 = people.some(({year}) => isOlder19(year));
+    const peopleAge = people.map((person) => {
+      let newPerson = Object.assign({}, person);
+      newPerson.age = currentYear - person.year;
+      return newPerson;
+    });
+    console.log(people);
+    printOut('Some and Every Checks on arrays - is at least one person 19 or older?',
+             people, anyOlder19);
+    printOut("Add age to person's records",
+             'the same as before', peopleAge);
+
+    const allOlder19 = people.every(({year}) => isOlder19(year))
+    console.log(allOlder19);
+    printOut("Is everyone 19 or older?",
+             'the same as before', allOlder19);
+
+    // Array.prototype.find()
+    // Find is like filter, but instead returns just the one you are looking for
+    // find the comment with the ID of 823423
+    let commentLookUpResult = comments.find(({id}) => id == 823423);
+    printOut('Find the comment with the ID of 823423',
+             comments, commentLookUpResult);
+
+
+    // Array.prototype.findIndex()
+    // Find the comment with this ID
+    // delete the comment with the ID of 823423
+    let commentIdx = comments.findIndex(({id}) => id == 823423);
+    let result = Object.assign({}, comments);
+    delete result[commentIdx];
+    printOut('Find the comment with the ID of 823423',
+             'the same as before', result);
+
+  </script>
+</body>
+</html>

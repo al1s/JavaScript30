@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  let prevEvent = {};
+  const canvasElm = document.getElementById('draw');
+  const context = canvasElm.getContext('2d');
+  const pts = [];
+  const pointsList = [];
+
+  // - replace pointsList listening to SetInterval - I can't detect any mouse motions without event listeners;
+  // + make sure that we process only changes - if no move detected, skip processing
+  // implement cubic bezier curve - find control point coordinates for each two pairs of mouse position;
+
+  canvasElm.addEventListener('mousemove', e => drawCircle(e));
+
+  function drawCircle(e) {
+    const mousePos = getMousePosition(e);
+    if (prevEvent.pageX != mousePos.X && prevEvent.pageY != mousePos.Y) {
+      pointsList.push(mousePos);
+      const mouseVelo = getMouseVelocity(e, prevEvent);
+      let radius = Math.abs(10 * Math.log(mouseVelo));
+      context.beginPath();
+      // find a control point
+      // make an interval out of velocity
+      context.lineWidth = 20 / Math.log(mouseVelo * 100);
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      drawSplineCubic(context, pointsList);
+      context.fillStyle = 'green';
+      context.fill();
+      // drawSpline(context, pts, 0.3, mouseVelo); // implement sliding frame to improve performance;
+      prevEvent = e;
+    }
+  }
+
+  function drawSplineCubic (context, pts) {
+    const triPts = [];
+    for (let i = pts.length - 3; i < pts.length; i++) {
+      triPts.push(pts[i] || pts[length]);
+    }
+    //cp = getControlPoint(triPts);
+    //context.quadraticCurveTo(cp.X, cp.Y, triPts[1].X, triPts[1].Y);
+
+    context.moveTo(triPts[0].X, triPts[0].Y);
+    context.quadraticCurveTo(triPts[1].X, triPts[1].Y, triPts[2].X, triPts[2].Y);
+    context.stroke();
+  }
+
+  function getControlPoint(pts) {
+    const cp = {};
+    const dist01 = Math.sqrt(Math.pow(pts[1].X - pts[0].X,2) + Math.pow(pts[1].Y - pts[0].Y,2))
+    const dist12 = Math.sqrt(Math.pow(pts[2].X - pts[1].X,2) + Math.pow(pts[2].Y - pts[1].Y,2))
+    const dist02 = Math.sqrt(Math.pow(pts[2].X - pts[0].X,2) + Math.pow(pts[2].Y - pts[0].Y,2))
+
+    const scaleF = dist01 / dist02;
+    const dist0CP = dist01 * scaleF;
+    const dist1CP = dist12 * scaleF;
+
+    const cos0 = Math.sqrt(Math.abs((Math.pow(dist01, 2) + Math.pow(dist0CP, 2) - Math.pow(dist1CP, 2))) / (2 * dist01 * dist0CP));
+    const sin0 = Math.sqrt(1 - Math.pow(cos0,2));
+
+    const absX = Math.round(dist0CP * cos0);
+    const absY = Math.round(dist0CP * sin0);
+
+    cp.X = absX + pts[0].X;
+    cp.Y = absY + pts[0].Y;
+
+    if (isNaN(cos0)) {
+      console.log('start');
+      console.log(pts);
+      console.log('dist01=',dist01)
+      console.log('dist12=',dist12)
+      console.log('dist02=',dist02)
+      console.log('scaleF=', scaleF);
+      console.log('dist0CP=',dist0CP);
+      console.log('dist1CP=',dist1CP);
+      console.log('denom=', 2 * dist01 * dist0CP);
+      console.log('nom=', Math.pow(dist01, 2) + Math.pow(dist0CP, 2) - Math.pow(dist1CP, 2));
+      console.log('cos=',cos0)
+      console.log('sin0=', sin0)
+      console.log(cp);
+      console.log('end');
+    }
+
+    return cp;
+
+  }
+
+  function getMousePosition(e) {
+    const mousePos = {};
+    [mousePos.X, mousePos.Y]  = [e.pageX, e.pageY];
+    return mousePos;
+  }
+
+  function getMouseVelocity(e, prevEvent) {
+    const interval =  e.timeStamp - prevEvent.timeStamp;
+    const dist = Math.sqrt(Math.pow(prevEvent.pageX - e.pageX, 2) + Math.pow(prevEvent.pageY - e.pageY, 2));
+    return dist / interval;
+  }
+
+
+  /*
+  	Copyright 2010 by Robin W. Spencer
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You can find a copy of the GNU General Public License
+      at http://www.gnu.org/licenses/.
+
+  */
+
+  function getControlPoints(x0,y0,x1,y1,x2,y2,t){
+    //  x0,y0,x1,y1 are the coordinates of the end (knot) pts of this segment
+    //  x2,y2 is the next knot -- not connected here but needed to calculate p2
+    //  p1 is the control point calculated here, from x1 back toward x0.
+    //  p2 is the next control point, calculated here and returned to become the
+    //  next segment's p1.
+    //  t is the 'tension' which controls how far the control points spread.
+
+    //  Scaling factors: distances from this knot to the previous and following knots.
+    var d01=Math.sqrt(Math.pow(x1-x0,2)+Math.pow(y1-y0,2));
+    var d12=Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
+
+    var fa=t*d01/(d01+d12);
+    var fb=t-fa;
+
+    var p1x=x1+fa*(x0-x2);
+    var p1y=y1+fa*(y0-y2);
+
+    var p2x=x1-fb*(x0-x2);
+    var p2y=y1-fb*(y0-y2);
+
+    return [p1x,p1y,p2x,p2y]
+  }
+
+  function drawSpline(ctx,pts,t, velocity) {
+    ctx.lineWidth = 20 / Math.log(velocity * 100);
+    ctx.save();
+    var cp=[];   // array of control points, as x0,y0,x1,y1,...
+    var n = pts.length;
+
+    // Draw an open curve, not connected at the ends
+    for(var i = 0; i < n - 4; i += 2){
+      cp = cp.concat(getControlPoints(pts[i], pts[i+1], pts[i+2], pts[i+3], pts[i+4], pts[i+5], t));
+    }
+
+    for(var i = 2; i < pts.length - 5; i += 2){
+      var color = HSVtoRGB(Math.floor(240*(i - 2) / (n - 2)), 0.8, 0.8);
+      ctx.strokeStyle=hexToCanvasColor(color, 0.75);
+      ctx.beginPath();
+      ctx.moveTo(pts[i], pts[i+1]);
+      ctx.bezierCurveTo(cp[2 * i - 2], cp[2 * i - 1], cp[2 * i], cp[2 * i + 1], pts[i + 2], pts[i + 3]);
+      ctx.stroke();
+      ctx.closePath();
+    }
+
+    //  For open curves the first and last arcs are simple quadratics.
+    // var color = HSVtoRGB(40, 0.4, 0.4);  // brown
+    //var color = HSVtoRGB(240,0.8,0.8); // indigo
+    ctx.strokeStyle = hexToCanvasColor(color, 0.75);
+    ctx.beginPath();
+    ctx.moveTo(pts[0], pts[1]);
+    ctx.quadraticCurveTo(cp[0], cp[1], pts[2], pts[3]);
+    //ctx.stroke();
+    ctx.closePath();
+
+    //var color = HSVtoRGB(240,0.8,0.8); // indigo
+    //ctx.strokeStyle=hexToCanvasColor(color,0.75);
+    ctx.beginPath();
+    ctx.moveTo(pts[n-2],pts[n-1]);
+    ctx.quadraticCurveTo(cp[2*n-10],cp[2*n-9],pts[n-4],pts[n-3]);
+    //ctx.stroke();
+    ctx.closePath();
+    ctx.restore();
+  }
+
+  </script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+</style>
+
+</body>
+</html>

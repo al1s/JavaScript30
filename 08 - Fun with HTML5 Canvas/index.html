@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  let prevEvent = {};
+  let lineWidth = 10;
+  let hue = 0;
+  let direction = 'up';
+  const mouseVelo = [];
+  const canvasElm = document.getElementById('draw');
+  const context = canvasElm.getContext('2d');
+
+  if (!Array.prototype.last){
+      Array.prototype.last = function(){
+          return this[this.length - 1].speed;
+      };
+  };
+  // if (!Array.prototype.prevLast){
+  //     Array.prototype.prevLast = function(){
+  //         return this[this.length - 2].speed;
+  //     };
+  // };
+  if (!Array.prototype.prevTenAvg){
+      Array.prototype.prevTenAvg= function(){
+        let result = this.slice(-11, -1).reduce((acc, elm) => {
+            acc += elm.speed;
+            return acc;
+          }, 0);
+          return addOns.round(result / 10, 4);
+      };
+  };
+  if (!Array.prototype.acceleration) {
+    Array.prototype.acceleration = function() {
+      let accList = [];
+      let result = this.slice(-11, -1).reduce((acc, curr, ndx, arr) => {
+          let prevElm = arr[ndx-1] || curr;
+          let speedChange = curr.speed - prevElm.speed;
+          // console.log('time=', curr.time, 'curr.speed=', curr.speed, 'prev.speed=', prevElm.speed, 'Change=', speedChange);
+          let accel = speedChange / curr.time;
+          acc += accel;
+          accList.push(accel);
+          return acc;
+        }, 0);
+        // console.log('accel result=', addOns.round( result / 10, 4), ...accList);
+        return [addOns.round(result / 10, 4), ...accList];
+    }
+  }
+
+  addOns = {};
+  addOns.round = function(number, precision) {
+      var factor = Math.pow(10, precision);
+      var tempNumber = number * factor;
+      var roundedTempNumber = Math.round(tempNumber);
+      return roundedTempNumber / factor;
+  };
+
+  // - replace pointsList listening to SetInterval - I can't detect any mouse motions without event listeners;
+  // + make sure that we process only changes - if no move detected, skip processing
+  // - don't need it, because it's too complicated: implement cubic bezier curve - find control point coordinates for each two pairs of mouse position;
+
+  canvasElm.addEventListener('mousemove', e => {
+    prevEvent = prevEvent || e;
+    draw(e);
+  });
+
+  function draw(e) {
+    if (prevEvent.pageX != e.pageX && prevEvent.pageY != e.pageY) {
+      // Want to change line width depending on mouse pointer speed.
+      // Failed to make it smooth.
+      mouseVelo.push(getMouseVelocity(e, prevEvent));
+      if (mouseVelo.length > 20) {
+        mouseVelo.splice(0,10);
+      }
+      let last = mouseVelo.last(),
+          accel = mouseVelo.acceleration();
+          // prevLast = mouseVelo.prevLast(),
+          // prevTenAvg = mouseVelo.prevTenAvg(),
+          // min  = Math.min(...mouseVelo),
+          // max  = Math.max(...mouseVelo);
+
+      context.beginPath();
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+
+      // set line color
+      context.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+      hue++;
+      if (hue > 360) {
+        hue = 0;
+        direction = (direction == 'up')?'down':'up';
+      }
+
+      // context.lineWidth = 10;
+      // if (accel[0] < accel[accel.length - 1] * 10 && context.lineWidth < 30) {
+      //   context.lineWidth++;
+      // } else {
+      //   context.lineWidth -= 1.5;
+      // }
+
+      // set line width
+      if (direction == 'up') {
+        lineWidth++;
+      } else {
+        lineWidth--;
+      }
+      context.lineWidth = lineWidth / 5;
+
+      // console.log('direction=', direction,'lineWidth=', lineWidth, 'hue=', hue);
+
+      context.moveTo(prevEvent.pageX, prevEvent.pageY);
+      context.lineTo(e.pageX, e.pageY);
+      context.stroke();
+
+      prevEvent = e;
+    }
+  }
+
+  function getMouseVelocity(e, prevEvent) {
+    const timeInterval = e.timeStamp - prevEvent.timeStamp || 1;
+    const distance = Math.sqrt(Math.pow(e.pageX - prevEvent.pageX, 2) + Math.pow(e.pageY - prevEvent.pageY, 2)) || 0;
+    const mouseIndicators = {};
+    mouseIndicators.speed = distance / timeInterval;
+    mouseIndicators.time = timeInterval;
+    return mouseIndicators;
+  }
+
+  </script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+</style>
+
+</body>
+</html>
