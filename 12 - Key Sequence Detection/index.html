@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  document.addEventListener('keydown', moreUnicorns);
+  const konamiCode = '38384040373937396665'; // Up, Up, Down, Down, Left, Right, Left, Right, b, a
+  let keyEntered = [];
+  let cornifyMode = false;
+
+  function moreUnicorns(e) {
+    keyEntered.push(e.which);
+    console.log(e.which);
+    keyEntered = keyEntered.slice(-10);
+    console.log(keyEntered.join(''));
+
+    if (keyEntered.join('') == konamiCode) {
+      cornify_add();
+      cornifyMode = true;
+    };
+
+    if (cornifyMode) {
+      cornify_add();
+    }
+  }
+</script>
+</body>
+</html>
