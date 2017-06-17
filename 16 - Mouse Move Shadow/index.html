@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color:black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+
+  function getElmCenterPoint(elm) {
+    const elmRect = elm.getBoundingClientRect();
+    const centerPoint = {
+        X: elmRect.left + elmRect.width / 2,
+        Y: elmRect.top + elmRect.height / 2
+      };
+    return centerPoint;
+  }
+
+  function getDistanceToElm(elm, mouseEvent) {
+    const elmCenter = getElmCenterPoint(elm);
+    return Math.sqrt(Math.pow(mouseEvent.clientX - elmCenter.X, 2) + Math.pow(mouseEvent.clientY - elmCenter.Y, 2));
+  }
+
+  function shiftCoordinates(elm, mouseEvent) {
+    const elmCenter = getElmCenterPoint(elm);
+    const shiftedCoord = {
+      X: mouseEvent.clientX - elmCenter.X,
+      Y: elmCenter.Y - mouseEvent.clientY
+    }
+    return shiftedCoord;
+  }
+
+  function mirrorCoord(targetElm, controlEvent, rate = 0.01, direction = 'XY', switchCoord = false) {
+    const shiftedCoord = shiftCoordinates(targetElm, controlEvent);
+    const distance = getDistanceToElm(targetElm, controlEvent);
+    let resultCoord = {}
+    let directionMultiplier = {};
+    switch (direction) {
+      case 'XY':
+        directionMultiplier = {dX: -1, dY: 1};
+        break;
+      case 'X':
+        directionMultiplier = {dX: -1, dY: -1};
+        break;
+      case 'Y':
+        directionMultiplier = {dX: 1, dY: 1};
+        break;
+      case 'same':
+        directionMultiplier = {dX: 1, dY: -1};
+        break;
+                     }
+
+    switch(switchCoord) {
+      case false:
+        resultCoord = {
+          X: Math.sign(shiftedCoord.X) * directionMultiplier.dX * Math.log(distance) * rate * Math.abs(shiftedCoord.X),
+          Y: Math.sign(shiftedCoord.Y) * directionMultiplier.dY * Math.log(distance) * rate * Math.abs(shiftedCoord.Y)
+        };
+        break;
+      case true:
+        resultCoord = {
+          Y: Math.sign(shiftedCoord.X) * directionMultiplier.dX * Math.log(distance) * rate * Math.abs(shiftedCoord.X),
+          X: Math.sign(shiftedCoord.Y) * directionMultiplier.dY * Math.log(distance) * rate * Math.abs(shiftedCoord.Y)
+        };
+        break;
+    }
+    return resultCoord;
+  }
+
+  function debounce(callback, wait, context = this) {
+    let timeout = null 
+    let callbackArgs = null
+
+    const later = () => callback.apply(context, callbackArgs)
+
+    return function() {
+      callbackArgs = arguments
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+    }
+  }
+
+function makeShadow(targetElm, rgbColor = '#000000', coordinates, distance = 0, blur = 0) {
+  //console.dir(targetElm);
+  //console.log(`${coordinates.X}px ${coordinates.Y}px ${blur}px ${distance}px ${rgbColor}`);
+  let elmTextShadow = getComputedStyle(targetElm).textShadow;
+  //console.log(elmTextShadow);
+  targetElm.style.textShadow = `${elmTextShadow}, ${coordinates.X}px ${coordinates.Y}px ${distance}px ${rgbColor}`;
+  elmTextShadow = getComputedStyle(targetElm).textShadow;
+  //console.log(elmTextShadow);
+}
+
+  const targetElm = document.querySelector('.hero h1');
+  //console.dir(targetElm);
+
+  document.addEventListener('mousemove', debounce(makeParalax, 14, false));
+
+  function makeParalax(e) {
+    //console.log('Inside makeParalax func')
+    //console.dir(mirrorCoord(targetElm, e, 0.1));
+    targetElm.style.textShadow = '';
+    console.log(getComputedStyle(targetElm).textShadow);
+    makeShadow(targetElm, '#ff00ff', mirrorCoord(targetElm, e, 0.1)); //magenta
+    makeShadow(targetElm, '#0099ff', mirrorCoord(targetElm, e, 0.1, 'Y', true)); //blue
+    makeShadow(targetElm, '#00ffff', mirrorCoord(targetElm, e, 0.1, 'X')); //cyan
+    makeShadow(targetElm, '#00ff66', mirrorCoord(targetElm, e, 0.1, 'same', true)); //green
+  }
+</script>
+</body>
+</html>
