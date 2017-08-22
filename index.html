@@ -1,9 +1,6 @@
 <!doctype html>
 <html>
 	<head>
-		<!-- <link rel="stylesheet" href="css/style.min.css" /> -->
-    <!-- <link rel="stylesheet" href="css/jquery.datepick.css"> -->
-    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
 		<meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,43 +14,96 @@
       .header__text {
         color: black;
       }
+
+			.item__list {
+				display: flex;
+				flex-wrap: wrap;
+				list-style: none;
+				justify-content: space-around;
+			}
+
+			.item {
+				flex: 1 1 30%;
+				min-width: 300px;
+				margin-left: 1rem;
+			}
+
+			ul, li {
+				padding: 0;
+				margin: 0;
+			}
     </style>
     <title>My JS30 marathon</title>
 	</head>
   <body>
     <h1 class="header__text">This is my approach to implement <a href="https://javascript30.com/">Wes Bos</a> appointments: one per day, each day.</h1>
 		<p class="text">I've started on the May 25.</p>
-    <ul class="item_list">
-      <li class="item1">Day 1: <a href="../posts/plan-and-done-for-may-25-2017/">Notes</a> on implementation, working <a href="01 - JavaScript Drum Kit/index.html">example</a>.</li>
-      <li class="item2">Day 2: <a href="../posts/plan-and-done-for-may-27-2017/">Notes</a> on implementation, working <a href="02 - JS and CSS Clock/index.html">example</a>.</li>
-      <li class="item3">Day 3: <a href="../posts/plan-and-done-for-may-27-2017/">Notes</a> on implementation, working <a href="03 - CSS Variables/index.html">example</a></li>
-      <li class="item4">Day 4: <a href="../posts/plan-and-done-for-may-28-2017/">Notes</a> on implementation, working <a href="04 - Array Cardio Day 1/index.html">example</a></li>
-      <li class="item5">Day 5: <a href="../posts/plan-and-done-for-may-29-2017/">Notes</a> on implementation, working <a href="05 - Flex Panel Gallery/index.html">example</a></li>
-      <li class="item6">Day 6: Notes, <a href="../posts/plan-and-done-for-may-30-2017/">day one</a>, <a href="../posts/plan-and-done-for-may-31-2017/">day two</a> on implementation, working <a href="06 - Type Ahead/index.html">example</a></li>
-      <li class="item7">Day 7: No notes - too easy, working <a href="07 - Array Cardio Day 2">example</a></li>
-      <li class="item8">Day 8: Notes, <a href="../posts/plan-and-done-for-june-02-2017/">day one</a>, <a href="../posts/plan-and-done-for-june-04-2017/">day two</a>, <a href="../posts/plan-and-done-for-june-05-2017/">day three</a> on implementation, working <a href="08 - Fun with HTML5 Canvas/index.html">example</a></li>
-      <li class="item9">Day 9: Dev tools practicum, no assignment.</li>
-      <li class="item10">Day 10: Notes, <a href="../posts/plan-and-done-for-june-06-2017/">day one</a>, <a href="../posts/plan-and-done-for-june-07-2017/">day two</a> on implementation, working <a href="10 - Hold Shift and Check Checkboxes/index.html">example</a></li>
-      <li class="item11">Day 11: <a href="../posts/plan-and-done-for-june-08-2017/">Notes</a> on implementation, working <a href="11 - Custom Video Player/index.html">example</a>.</li>
-      <li class="item12">Day 12: <a href="../posts/plan-and-done-for-june-09-2017/">Notes</a> on implementation, working <a href="12 - Key Sequence Detection/index.html">example</a>.</li>
-      <li class="item13">Day 13: <a href="../posts/plan-and-done-for-june-11-2017/">Notes</a> on implementation, working <a href="13 - Slide in on Scroll/index.html">example</a>.</li>
-      <li class="item14">Day 14: No notes - working with Arrays.</li>
-      <li class="item15">Day 15: <a href="../posts/plan-and-done-for-june-12-2017/">Notes</a> on implementation, working <a href="15 - LocalStorage/index.html">example</a>.</li>
-      <li class="item16">Day 16: Notes, <a href="../posts/plan-and-done-for-june-13-2017/">day one</a>, <a href="../posts/plan-and-done-for-june-14-2017/">day two</a>, <a href="../posts/plan-and-done-for-june-16-2017/">day three</a> on implementation, working <a href="16 - Mouse Move Shadow/index.html">example</a></li>
-      <li class="item17">Day 17: <a href="../posts/plan-and-done-for-june-16-2017/">Notes</a> on implementation, working <a href="17 - Sort Without Articles/index.html">example</a>.</li>
-      <li class="item18">Day 18: <a href="../posts/plan-and-done-for-june-17-2017/">Notes</a> on implementation, working <a href="18 - Adding Up Times with Reduce/index.html">example</a>.</li>
-      <li class="item19"><a href=""></a></li>
-      <li class="item20"><a href=""></a></li>
-      <li class="item21"><a href=""></a></li>
-      <li class="item22"><a href=""></a></li>
-      <li class="item23"><a href=""></a></li>
-      <li class="item24"><a href=""></a></li>
-      <li class="item25"><a href=""></a></li>
-      <li class="item26"><a href=""></a></li>
-      <li class="item27"><a href=""></a></li>
-      <li class="item28"><a href=""></a></li>
-      <li class="item29"><a href=""></a></li>
-      <li class="item30"><a href=""></a></li>
+    <ul class="item__list">
+      <li class="item">Day 1: <a href="../posts/plan-and-done-for-may-25-2017/">Notes</a> on implementation, working <a href="01 - JavaScript Drum Kit/index.html">example</a>.
+        <p data-height="365" data-theme-id="light" data-slug-hash="ZJxdNR" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 1. Drum Kit" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/ZJxdNR/">JS30: 1. Drum Kit</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+      </li>
+
+      <li class="item">Day 2: <a href="../posts/plan-and-done-for-may-27-2017/">Notes</a> on implementation, working <a href="02 - JS and CSS Clock/index.html">example</a>.
+        <p data-height="365" data-theme-id="light" data-slug-hash="EvEqPJ" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 2. JS and CSS clock" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/EvEqPJ/">JS30: 2. JS and CSS clock</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+      </li>
+
+      <li class="item">Day 3: <a href="../posts/plan-and-done-for-may-27-2017/">Notes</a> on implementation, working <a href="03 - CSS Variables/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="ayYeZg" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 3. CSS Variables"  data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/ayYeZg/">JS30: 3. CSS Variables</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 4: <a href="../posts/plan-and-done-for-may-28-2017/">Notes</a> on implementation, working <a href="04 - Array Cardio Day 1/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="ayYeBg" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 4. Array cardio day 1"  data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/ayYeBg/">JS30: 4. Array cardio day 1</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 5: <a href="../posts/plan-and-done-for-may-29-2017/">Notes</a> on implementation, working <a href="05 - Flex Panel Gallery/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="PKRMWm" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 5. Flex panel gallery" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/PKRMWm/">JS30: 5. Flex panel gallery</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 6: Notes, <a href="../posts/plan-and-done-for-may-30-2017/">day one</a>, <a href="../posts/plan-and-done-for-may-31-2017/">day two</a> on implementation, working <a href="06 - Type Ahead/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="zdWgZQ" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 6. Type ahead" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/zdWgZQ/">JS30: 6. Type ahead</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 7: No notes - too easy, working <a href="07 - Array Cardio Day 2">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="jLzgwK" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 7. Array cardio day 2" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/jLzgwK/">JS30: 7. Array cardio day 2</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 8: Notes, <a href="../posts/plan-and-done-for-june-02-2017/">day one</a>, <a href="../posts/plan-and-done-for-june-04-2017/">day two</a>, <a href="../posts/plan-and-done-for-june-05-2017/">day three</a> on implementation, working <a href="08 - Fun with HTML5 Canvas/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="mMxNMW" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 8. Fun with HTML5 Canvas" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/mMxNMW/">JS30: 8. Fun with HTML5 Canvas</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 9: Dev tools practicum, no assignment.</li>
+      <li class="item">Day 10: Notes, <a href="../posts/plan-and-done-for-june-06-2017/">day one</a>, <a href="../posts/plan-and-done-for-june-07-2017/">day two</a> on implementation, working <a href="10 - Hold Shift and Check Checkboxes/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="jLzgap" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 10. Hold Shift to check multiple checkboxes" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/jLzgap/">JS30: 10. Hold Shift to check multiple checkboxes</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 11: <a href="../posts/plan-and-done-for-june-08-2017/">Notes</a> on implementation, working <a href="11 - Custom Video Player/index.html">example</a>.
+				<p data-height="365" data-theme-id="light" data-slug-hash="Yxamep" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 11. Custom HTML5 video player" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/Yxamep/">JS30: 11. Custom HTML5 video player</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 12: <a href="../posts/plan-and-done-for-june-09-2017/">Notes</a> on implementation, working <a href="12 - Key Sequence Detection/index.html">example</a>.
+				<p data-height="365" data-theme-id="light" data-slug-hash="XaEvxr" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 12. Key sequence detection" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/XaEvxr/">JS30: 12. Key sequence detection</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 13: <a href="../posts/plan-and-done-for-june-11-2017/">Notes</a> on implementation, working <a href="13 - Slide in on Scroll/index.html">example</a>.
+				<p data-height="365" data-theme-id="light" data-slug-hash="xLjGER" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 13. Slide in on scroll" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/xLjGER/">JS30: 13. Slide in on scroll</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 14: No notes - working with Arrays.</li>
+      <li class="item">Day 15: <a href="../posts/plan-and-done-for-june-12-2017/">Notes</a> on implementation, working <a href="15 - LocalStorage/index.html">example</a>.
+				<p data-height="365" data-theme-id="light" data-slug-hash="ZJoGBG" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 15. Local storage" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/ZJoGBG/">JS30: 15. Local storage</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 16: Notes, <a href="../posts/plan-and-done-for-june-13-2017/">day one</a>, <a href="../posts/plan-and-done-for-june-14-2017/">day two</a>, <a href="../posts/plan-and-done-for-june-16-2017/">day three</a> on implementation, working <a href="16 - Mouse Move Shadow/index.html">example</a>
+				<p data-height="365" data-theme-id="light" data-slug-hash="MvGwJY" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 16. Mouse move shadow" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/MvGwJY/">JS30: 16. Mouse move shadow</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 17: <a href="../posts/plan-and-done-for-june-16-2017/">Notes</a> on implementation, working <a href="17 - Sort Without Articles/index.html">example</a>.
+				<p data-height="365" data-theme-id="light" data-slug-hash="NvMqvm" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 17. Sort without articles" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/NvMqvm/">JS30: 17. Sort without articles</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item">Day 18: <a href="../posts/plan-and-done-for-june-17-2017/">Notes</a> on implementation, working <a href="18 - Adding Up Times with Reduce/index.html">example</a>.
+				<p data-height="365" data-theme-id="light" data-slug-hash="QMrbqe" data-default-tab="result" data-user="alstof" data-embed-version="2" data-pen-title="JS30: 18. Adding up times with reduce" data-preview="true" class="codepen">See the Pen <a href="https://codepen.io/alstof/pen/QMrbqe/">JS30: 18. Adding up times with reduce</a> by alstof (<a href="https://codepen.io/alstof">@alstof</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+			</li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
+      <li class="item"><a href=""></a></li>
     </ul>
   </body>
+	<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 </html>
